@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Just a moment...</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f6f7fb;
+      color: #222;
+      display: grid;
+      place-items: center;
+    }
+    .wrap {
+      width: min(92vw, 560px);
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .brand img {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid #eee;
+      padding: 6px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.6rem;
+      font-weight: 650;
+    }
+    .sub {
+      color: #555;
+      line-height: 1.5;
+      margin: 8px 0 22px;
+    }
+    #challenge-area {
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      padding: 18px;
+      background: #fafafa;
+    }
+    
+    .status {
+      margin-top: 14px;
+      color: #666;
+      min-height: 20px;
+      font-size: 0.92rem;
+    }
+    .footer {
+      margin-top: 18px;
+      font-size: 0.8rem;
+      color: #888;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="brand">
+      <img src="/assets/site-logo.png" alt="Site logo" />
+      <div>
+        <h1>Just a moment...</h1>
+        <div class="sub">Verifying you are human. This may take a few seconds.</div>
+      </div>
+    </div>
+
+    <div id="challenge-area">
+      <div
+        class="cf-turnstile"
+        data-sitekey="0x4AAAAAADCj0J2b6qFkZuWd"
+        data-theme="light"
+        data-action="index_access"
+        data-callback="onTurnstileSuccess"
+        data-error-callback="onTurnstileError">
+      </div>
+      <div class="status" id="status">Waiting for security verification…</div>
+    </div>
+
+    <div class="footer">Performance & security by Cloudflare Turnstile</div>
+  </main>
+
+  <script>
+    const statusEl = document.getElementById('status');
+
+    window.onTurnstileSuccess = async function () {
+      statusEl.textContent = 'Verification complete. Redirecting…';
+      try {
+        const formData = new FormData();
+        formData.append('redirect', '/home.html');
+        formData.append('cf-turnstile-response', turnstile.getResponse());
+
+        const response = await fetch('/verify-human', {
+          method: 'POST',
+          body: formData,
+          credentials: 'include'
+        });
+
+        if (response.redirected) {
+          window.location.replace(response.url);
+          return;
+        }
+
+        window.location.replace('/home.html');
+      } catch (_) {
+        statusEl.textContent = 'Network error. Please retry.';
+        if (window.turnstile) turnstile.reset();
+      }
+    };
+
+    window.onTurnstileError = function () {
+      statusEl.textContent = 'Verification failed. Please retry.';
+    };
+  </script>
+</body>
+</html>

